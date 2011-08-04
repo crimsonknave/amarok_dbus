@@ -33,14 +33,29 @@ switches.add_argument('-b', '--back', action="store_const", const="back", dest="
 switches.add_argument('--pause', action="store_const", const="pause", dest="action", default=None, help="Pause the playback")
 args = parser.parse_args()
 
+class Connection:
+  def __init__(self):
+    self.player = dbus.SessionBus().get_object(amarokbus, playerpath)
+
+  # The Pause method seems to be a toggle like play/pause.
+  # This method will only pause
+  def pause(self):
+    status = self.player.GetStatus()
+    # I believe that status[0].real being 1 is paused...?
+    if status[0].real == 1:
+      return
+    else:
+      self.player.Pause()
+
+
 if __name__ == "__main__":
-  player = dbus.SessionBus().get_object(amarokbus, playerpath)
+  that = Connection()
   commands = {
-      'play':player.PlayPause,
-      'stop':player.Stop,
-      'back':player.Prev,
-      'forward':player.Next,
-      'pause':player.Pause
+      'play':that.player.PlayPause,
+      'stop':that.player.Stop,
+      'back':that.player.Prev,
+      'forward':that.player.Next,
+      'pause':that.pause
       }
   commands[args.action]()
 
