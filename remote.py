@@ -26,10 +26,11 @@ playerpath = "/Player"
 
 parser = argparse.ArgumentParser(description="Provides a dbus interface to control amarok.  Mostly for Docky")
 switches = parser.add_mutually_exclusive_group(required=True)
-switches.add_argument('-p', '--play', '--pause', action="store_const", const="play", dest="action", default=None, help="Toggle play/pause")
+switches.add_argument('-p', '--play', action="store_const", const="play", dest="action", default=None, help="Toggle play/pause")
 switches.add_argument('-s', '--stop', action="store_const", const="stop", dest="action", default=None, help="Stop the playback")
 switches.add_argument('-f', '--forward', action="store_const", const="forward", dest="action", default=None, help="Go to the next track")
 switches.add_argument('-b', '--back', action="store_const", const="back", dest="action", default=None, help="Go the the previous track")
+switches.add_argument('--pause', action="store_const", const="pause", dest="action", default=None, help="Pause the playback")
 args = parser.parse_args()
 
 if __name__ == "__main__":
@@ -38,7 +39,8 @@ if __name__ == "__main__":
       'play':player.PlayPause,
       'stop':player.Stop,
       'back':player.Prev,
-      'forward':player.Next
+      'forward':player.Next,
+      'pause':player.Pause
       }
   commands[args.action]()
 
