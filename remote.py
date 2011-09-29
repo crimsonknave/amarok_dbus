@@ -42,10 +42,10 @@ class Connection:
   def pause(self):
     status = self.player.GetStatus()
     # I believe that status[0].real being 1 is paused...?
-    if status[0].real == 1:
-      return
-    else:
+    if status[0].real == 0:
       self.player.Pause()
+    else:
+      return
 
 
 if __name__ == "__main__":
